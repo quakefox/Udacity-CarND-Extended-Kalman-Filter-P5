@@ -9,10 +9,12 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::string;
 using std::vector;
+using std::cout;
+using std::endl;
 
 // for convenience
 using json = nlohmann::json;
-
+  
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
 // else the empty string "" will be returned.
@@ -30,12 +32,18 @@ string hasData(string s) {
 }
 
 int main() {
+  
+
   uWS::Hub h;
 
   // Create a Kalman Filter instance
-  FusionEKF fusionEKF;
 
+
+  FusionEKF fusionEKF;
+   
   // used to compute the RMSE later
+
+  
   Tools tools;
   vector<VectorXd> estimations;
   vector<VectorXd> ground_truth;
@@ -45,7 +53,7 @@ int main() {
                uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
-    // The 2 signifies a websocket event
+    // The 2 signifies a websocket event           
     if (length && length > 2 && data[0] == '4' && data[1] == '2') {
       auto s = hasData(string(data));
 
@@ -74,6 +82,7 @@ int main() {
             float py;
             iss >> px;
             iss >> py;
+            //cout <<"main: 'Laser data received' " <<endl;
             meas_package.raw_measurements_ << px, py;
             iss >> timestamp;
             meas_package.timestamp_ = timestamp;
@@ -86,6 +95,7 @@ int main() {
             iss >> ro;
             iss >> theta;
             iss >> ro_dot;
+            //cout <<"main: 'RADAR data received' " <<endl;
             meas_package.raw_measurements_ << ro,theta, ro_dot;
             iss >> timestamp;
             meas_package.timestamp_ = timestamp;
